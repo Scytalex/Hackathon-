@@ -33,7 +33,42 @@ contract ProfitDistributor is ChainlinkClient, Ownable {
     }
 
     // Función para distribuir las ganancias
-    function distributeProfits() public {
-        // Lógica para distribuir las ganancias entre los propietarios de tokens
+    function distributeProfits() public payable {
+    
+        uint256 amountPerToken = msg.value.div(totalSupply); //calculamos la cantidad de USDC que tocaria por token
+
+        address[] memory holders = getTokenHolders();
+        for (uint256 i = 0; i < holders.length; i++) {
+            address owner = holders[i];
+            uint256 ownerBalance = balances[owner];
+            uint256 ownerShare = amountPerToken.mul(ownerBalance);  // la candidad de USDC que le tocaria al owner segun la cantidad de tokens que posea
+            payable(owner).transfer(ownerShare);                    // se paga a los owners.
+        }
+    }
+
+    function withdraw() public onlyOwner {        //en esta funcion hacemos el pago a los holders
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No balance to withdraw");
+        payable(owner()).transfer(balance);
+    }
+
+    function getTokenHolders() internal view returns (address[] memory) {  //obtenemos la cantidad de holders
+        uint256 holderCount = 0;                            //inicializamos el contador
+        for (uint256 i = 0; i < balances.length; i++) {     //recorremos los balances
+            if (balances[address(uint160(i))] > 0) {        //si en el balance se encuentra al menos un token 
+                holderCount++;                              // se incrementa el contador
+            }
+        }
+
+        address[] memory holders = new address[](holderCount);
+        uint256 index = 0;
+        for (uint256 i = 0; i < balances.length; i++) {
+            if (balances[address(uint160(i))] > 0) {
+                holders[index] = address(uint160(i));
+                index++;
+            }
+        }
+
+        return holders;
     }
 }
