@@ -3,13 +3,13 @@ pragma solidity ^0.8.0;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/token/ERC1155/ERC1155.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/access/Ownable.sol";
 
-contract CarNFT is ERC1155("https://api.example.com/metadata/{id}.json"), Ownable {
+contract CarNFT is ERC1155, Ownable {
     uint256 public constant CAR_TOKEN = 0; // ID del token que representa el carro
     uint256 public constant MAX_TOKENS = 10; // Número máximo de tokens que se pueden crear
     uint256 public tokenCount; // Contador de tokens creados
 
     // Constructor que inicializa el contrato ERC1155 con la URI base para los metadatos
-    constructor() ERC1155("https://api.example.com/metadata/{id}.json") {
+    constructor() ERC1155("") {
         tokenCount = 0; // Inicializa el contador de tokens
     }
 
