@@ -1,0 +1,25 @@
+const { ethers } = require("hardhat");
+
+async function main() {
+    const APIConsumer = await ethers.getContractFactory("APIConsumer");
+    const apiConsumer = await APIConsumer.deploy();
+    await apiConsumer.deployed();
+
+    console.log("APIConsumer deployed to:", apiConsumer.address);
+
+    // URL de la API y cuerpo del POST (en este caso, en formato JSON)
+    const url = "https://docs.trustlesswork.com/api/invoke-deployer-contract";
+    const postData = '{"engagementId": "123", "description": "Deployment Request"}';
+
+    const tx = await apiConsumer.requestAPIResponse(url, postData);
+    await tx.wait();
+
+    // Obtener la respuesta
+    const apiResponse = await apiConsumer.apiResponse();
+    console.log("API response:", apiResponse);
+}
+
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});

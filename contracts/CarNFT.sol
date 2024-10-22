@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/token/ERC1155/ERC1155.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.2/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol"; // Cambiado para importar desde el paquete local
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CarNFT is ERC1155, Ownable {
     uint256 public constant CAR_TOKEN = 0; // ID del token que representa el carro
