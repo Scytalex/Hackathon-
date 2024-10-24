@@ -13,10 +13,8 @@ contract ProfitDistributorWAPI is Ownable {
     uint256 public totalSupply; // Suministro total de tokens
 
    // Constructor que recibe la dirección del propietario inicial
-    constructor() Ownable() {
-        // El propietario inicial será la dirección que despliega el contrato
-        
-    }
+  constructor() Ownable(msg.sender){
+      }
 
     // Función para recibir Ether y agregarlo a las ganancias
     receive() external payable {
