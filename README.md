@@ -21,6 +21,6 @@ Develop a Web3 platform that allows for the tokenization of productive vehicles 
 
 
 # Team Members
-- [Joseph Poveda] (https://github.com/josephpdf)
-- [Carlos Pereira] (https://github.com/Scytalex)
-- [Pablo Guerrero] (https://github.com/PablogcCR)
+- [Joseph Poveda](https://github.com/josephpdf)
+- [Carlos Pereira](https://github.com/Scytalex)
+- [Pablo Guerrero](https://github.com/PablogcCR)
