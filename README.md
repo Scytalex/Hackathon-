@@ -18,3 +18,9 @@ Develop a Web3 platform that allows for the tokenization of productive vehicles 
 - Integrate the platform with a blockchain network that facilitates the execution of smart contracts and allows users to interact with tokens and view profits transparently.
 - Promote the adoption of the CarNFT project through marketing strategies aimed at users interested in decentralized investments and the sharing economy.
 - Establish accountability and transparency mechanisms, providing investors with periodic reports on the vehicle's status, generated profits, and fund distributions.
+
+
+# Team Members
+- [Joseph Poveda] (https://github.com/josephpdf)
+- [Carlos Pereira] (https://github.com/Scytalex)
+- [Pablo Guerrero] (https://github.com/PablogcCR)
