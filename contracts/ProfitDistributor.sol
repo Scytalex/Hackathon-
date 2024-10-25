@@ -11,6 +11,9 @@ contract ProfitDistributor is ChainlinkClient, Ownable {
     address private oracle; // Dirección del oráculo de Chainlink
     bytes32 private jobId; // ID del trabajo de Chainlink
     uint256 private fee; // Tarifa de Chainlink
+    uint256 public totalSupply; // Asegúrate de definir totalSupply
+    mapping(address => uint256) public balances; // Definición del mapeo de balances
+    address[] public tokenHolders; // Array para almacenar los titulares de tokens
 
     constructor() {
         setPublicChainlinkToken();
@@ -34,15 +37,15 @@ contract ProfitDistributor is ChainlinkClient, Ownable {
 
     // Función para distribuir las ganancias
     function distributeProfits() public payable {
-    
-        uint256 amountPerToken = msg.value.div(totalSupply); //calculamos la cantidad de USDC que tocaria por token
+        require(totalSupply > 0, "Total supply must be greater than zero"); // Verificación de totalSupply
+        uint256 amountPerToken = msg.value / totalSupply; // calculamos la cantidad de USDC que tocaria por token
 
-        address[] memory holders = getTokenHolders();
-        for (uint256 i = 0; i < holders.length; i++) {
-            address owner = holders[i];
+        for (uint256 i = 0; i < tokenHolders.length; i++) {
+            address owner = tokenHolders[i];
             uint256 ownerBalance = balances[owner];
-            uint256 ownerShare = amountPerToken.mul(ownerBalance);  // la candidad de USDC que le tocaria al owner segun la cantidad de tokens que posea
-            payable(owner).transfer(ownerShare);                    // se paga a los owners.
+            uint256 ownerShare = amountPerToken * ownerBalance;  // la cantidad de USDC que le tocaria al owner segun la cantidad de tokens que posea
+            (bool success, ) = payable(owner).call{value: ownerShare}(""); // se paga a los owners de forma segura
+            require(success, "Transfer failed"); // Verificación de la transferencia
         }
     }
 
@@ -52,23 +55,7 @@ contract ProfitDistributor is ChainlinkClient, Ownable {
         payable(owner()).transfer(balance);
     }
 
-    function getTokenHolders() internal view returns (address[] memory) {  //obtenemos la cantidad de holders
-        uint256 holderCount = 0;                            //inicializamos el contador
-        for (uint256 i = 0; i < balances.length; i++) {     //recorremos los balances
-            if (balances[address(uint160(i))] > 0) {        //si en el balance se encuentra al menos un token 
-                holderCount++;                              // se incrementa el contador
-            }
-        }
-
-        address[] memory holders = new address[](holderCount);
-        uint256 index = 0;
-        for (uint256 i = 0; i < balances.length; i++) {
-            if (balances[address(uint160(i))] > 0) {
-                holders[index] = address(uint160(i));
-                index++;
-            }
-        }
-
-        return holders;
+    function getTokenHolders() internal view returns (address[] memory) {
+        return tokenHolders; // Retorna el array de titulares de tokens
     }
 }

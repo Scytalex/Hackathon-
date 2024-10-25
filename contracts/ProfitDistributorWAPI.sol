@@ -3,18 +3,20 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol"; // Importar la interfaz ERC20
 
 contract ProfitDistributorWAPI is Ownable {
     using SafeMath for uint256;
 
     uint256 public profit; // Variable para almacenar las ganancias
-    address public tokenAddress = 0x3328358128832A260C76A4141e19E2A943CD4B6D; // Dirección del token que debe tener el owner
+    IERC20 public token; // Declarar la variable del token
     mapping(address => uint256) public balances; // Mapeo para los balances de los holders
     uint256 public totalSupply; // Suministro total de tokens
 
-   // Constructor que recibe la dirección del propietario inicial
-  constructor() Ownable(msg.sender){
-      }
+   // Constructor que recibe la dirección del token
+  constructor(address _tokenAddress) Ownable() {
+      token = IERC20(_tokenAddress); // Inicializar el token
+  }
 
     // Función para recibir Ether y agregarlo a las ganancias
     receive() external payable {
@@ -62,6 +64,11 @@ contract ProfitDistributorWAPI is Ownable {
         }
 
         return holders; // Devolvemos el array de holders
+    }
+
+    // Función para obtener el balance de tokens de una dirección
+    function getTokenBalance(address holder) public view returns (uint256) {
+        return token.balanceOf(holder); // Retorna el balance de tokens de la dirección
     }
 
     // Función para que el propietario pueda actualizar el balance de los holders
